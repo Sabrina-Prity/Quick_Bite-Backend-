@@ -153,7 +153,11 @@ DATABASES = {
         'USER': 'postgres.vkiwfizxglxqfrvltulv',
         'PASSWORD': 'LrKsEq-J2c9p#h8',
         'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543'
+        'PORT': '6543',
+        'CONN_MAX_AGE': 60,  # Keep connections open for 60 seconds
+        'OPTIONS': {
+            'options': '-c statement_timeout=30000',
+        },
     }
 }
 
