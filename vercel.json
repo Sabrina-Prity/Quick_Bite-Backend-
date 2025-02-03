@@ -1,0 +1,13 @@
+{
+  "builds": [{
+    "src": "QuickBite_Project/wsgi.py",
+    "use": "@vercel/python",
+    "config": { "maxLambdaSize": "150mb", "runtime": "python3.12.3" }
+  }],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "QuickBite_Project/wsgi.py"
+    }
+  ]
+}

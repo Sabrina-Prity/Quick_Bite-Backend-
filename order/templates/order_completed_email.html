@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Completed - Quick Bite</title>
+</head>
+<body>
+    <h2>Hello {{ user.first_name }},</h2>
+    
+    <p>Your order <strong>#{{ order_id }}</strong> has been successfully Delivered! 🎉</p>
+
+    <h3>Order Details:</h3>
+    <ul>
+        {% for item in items %}
+            <li>{{ item.quantity }} x {{ item.food_item.name }} - ${{ item.price }}</li>
+        {% endfor %}
+    </ul>
+
+    <p>Thank you for choosing Quick Bite. We hope you enjoy your meal! 🍽️</p>
+
+    <p>Best regards,</p>
+    <p><strong>Quick Bite Team</strong></p>
+</body>
+</html>
