@@ -19,7 +19,8 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import cloudinary_storage
-
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,17 +150,18 @@ WSGI_APPLICATION = 'QuickBite_Project.wsgi.app'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.vkiwfizxglxqfrvltulv',
-        'PASSWORD': 'LrKsEq-J2c9p#h8',
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543',
-        'CONN_MAX_AGE': 60,  # Keep connections open for 60 seconds
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+        'CONN_MAX_AGE': 60,
         'OPTIONS': {
             'options': '-c statement_timeout=30000',
         },
     }
 }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
