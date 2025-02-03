@@ -98,7 +98,7 @@ SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
     "https://sandbox.sslcommerz.com",
-    "https://quick-bite-blue.vercel.app",
+    "https://quick-bite-backend-pink.vercel.app/",
 ]
 
 
