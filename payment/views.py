@@ -55,8 +55,8 @@ class Payment_View(APIView):
             "tran_id": transaction_id,
             "success_url": f"http://127.0.0.1:8000/payment/successs/?user_id={request.user.id}",
             # "success_url": f"http://127.0.0.1:8000/successs/",
-            "fail_url": f"http://127.0.0.1:8000/payment/fail/",        
-            "cancel_url": f"http://127.0.0.1:8000/payment/cancel/",    
+            "fail_url": f"{settings.BASE_URL}/payment/fail/",        
+            "cancel_url": f"{settings.BASE_URL}/payment/cancel/",    
             "emi_option": 0,
             "cus_name": request.user.username,
             "cus_email": request.user.email,
@@ -172,7 +172,7 @@ class PaymentFail_View(APIView):
             # order.buying_status = 'Canceled'
             # order.save()
 
-            return HttpResponseRedirect(f"https://sabrina-prity.github.io/Quick_Bite_Frontend/index.html")  # Updated URL
+            return HttpResponseRedirect(f"http://127.0.0.1:5500/index.html")  # Updated URL
         except Payment_Model.DoesNotExist:
             return Response({'message': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -193,7 +193,7 @@ class PaymentCancel_View(APIView):
             # order.buying_status = 'Canceled'
             # order.save()
 
-            return HttpResponseRedirect(f"https://sabrina-prity.github.io/Quick_Bite_Frontend/index.html")  # Updated URL
+            return HttpResponseRedirect(f"http://127.0.0.1:5500/index.html")  # Updated URL
         except Payment_Model.DoesNotExist:
             return Response({'message': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
 
