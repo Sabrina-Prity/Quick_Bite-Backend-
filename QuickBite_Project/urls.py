@@ -29,7 +29,7 @@ urlpatterns = [
     path('food/', include('food.urls')),
     path('cart/', include('cart.urls')),
     path('category/', include('category.urls')),
-    path('', include('payment.urls')),
+    path('payment/', include('payment.urls')),
     re_path(r'^favicon\.png$', RedirectView.as_view(url='/static/favicon.png', permanent=True)),
 ]
 
