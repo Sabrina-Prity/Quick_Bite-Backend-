@@ -148,6 +148,10 @@ WSGI_APPLICATION = 'QuickBite_Project.wsgi.app'
 print(f'DB_NAME: {os.getenv("DB_NAME")}')
 print(f'DB_USER: {os.getenv("DB_USER")}')
 
+
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -156,27 +160,13 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-        'CONN_MAX_AGE': 600,  
+        'CONN_MAX_AGE': 60,
+        'OPTIONS': {
+            'options': '-c statement_timeout=30000',
+            'connect_timeout': 10,
+        },
     }
 }
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),
-#         'CONN_MAX_AGE': 60,
-#         'OPTIONS': {
-#             'options': '-c statement_timeout=30000',
-#             'connect_timeout': 10,
-#         },
-#     }
-# }
 
 
 REST_FRAMEWORK = {

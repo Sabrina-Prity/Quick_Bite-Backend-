@@ -1,14 +1,12 @@
 {
   "builds": [{
     "src": "QuickBite_Project/wsgi.py",
-    "use": "@vercel/python",
-    "config": { "maxLambdaSize": "150mb", "runtime": "python3.12.3" }
+    "use": "@vercel/python"
   }],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "QuickBite_Project/wsgi.py"
+      "dest": "gunicorn -b 0.0.0.0:8000 QuickBite_Project.wsgi"
     }
-  ],
-  "timeout": 30
+  ]
 }
