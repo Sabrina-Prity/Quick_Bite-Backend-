@@ -111,7 +111,9 @@ BASE_URL = "http://127.0.0.1:8000"
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOWED_ORIGINS = [
+    "https://sabrina-prity.github.io",
     'http://127.0.0.1:5500',
     'http://127.0.0.1:8000',
     
@@ -150,8 +152,8 @@ WSGI_APPLICATION = 'QuickBite_Project.wsgi.application'
 #     }
 # }
 
-print(f'DB_NAME: {os.getenv("DB_NAME")}')
-print(f'DB_USER: {os.getenv("DB_USER")}')
+# print(f'DB_NAME: {os.getenv("DB_NAME")}')
+# print(f'DB_USER: {os.getenv("DB_USER")}')
 
 
 
