@@ -131,7 +131,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'QuickBite_Project.wsgi.app'
+WSGI_APPLICATION = 'QuickBite_Project.wsgi.application'
+
 
 
 
