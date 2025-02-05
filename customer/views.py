@@ -19,7 +19,11 @@ from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
+from django.shortcuts import render
+from django.http import HttpResponse
 
+def home(request):
+    return HttpResponse("Welcome to QuickBite API!")
 
 class CustomerRegistrationView(APIView):
     permission_classes = [permissions.AllowAny]

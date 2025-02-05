@@ -21,9 +21,7 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.urls import path
 from django.http import HttpResponse
-
-def empty_favicon(request):
-    return HttpResponse(status=204)
+from customer.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,8 +32,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('category/', include('category.urls')),
     path('payment/', include('payment.urls')),
-    path('favicon.ico', empty_favicon),
-    path('static/favicon.png', empty_favicon),
+    path('', home),
 ]
 
 
