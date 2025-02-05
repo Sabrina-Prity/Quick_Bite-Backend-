@@ -20,6 +20,10 @@ import cloudinary.uploader
 import cloudinary.api
 import cloudinary_storage
 from dotenv import load_dotenv
+import logging
+
+logging.getLogger("django.request").setLevel(logging.ERROR)
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
