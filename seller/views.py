@@ -86,9 +86,9 @@ def activate(request, uid64, token):
             print( "83 line User ans Token",user, token)
             user.is_active = True
             user.save()
-            return redirect('http://127.0.0.1:5500/seller_login.html')
+            return redirect('https://sabrina-prity.github.io/Quick_Bite_Frontend/seller_login.html')
         else:
-            return redirect('http://127.0.0.1:5500/seller_register.html')
+            return redirect('https://sabrina-prity.github.io/Quick_Bite_Frontend/seller_register.html')
 
 
 
