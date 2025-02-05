@@ -9,5 +9,10 @@
       "src": "/(.*)",
       "dest": "QuickBite_Project/wsgi.py"
     }
-  ]
+  ],
+  "functions": {
+    "api/*.py": {
+      "maxDuration": 30
+    }
+  }
 }
