@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import re_path
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,7 +29,8 @@ urlpatterns = [
     path('food/', include('food.urls')),
     path('cart/', include('cart.urls')),
     path('category/', include('category.urls')),
-    path('', include('payment.urls'))
+    path('', include('payment.urls')),
+    re_path(r'^favicon\.png$', RedirectView.as_view(url='/static/favicon.png', permanent=True)),
 ]
 
 
