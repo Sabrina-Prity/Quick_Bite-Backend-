@@ -35,6 +35,7 @@ urlpatterns = [
     path('category/', include('category.urls')),
     path('payment/', include('payment.urls')),
     path('favicon.ico', empty_favicon),
+    path('static/favicon.png', empty_favicon),
 ]
 
 
