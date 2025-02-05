@@ -10,9 +10,5 @@
       "dest": "QuickBite_Project/wsgi.py"
     }
   ],
-  "functions": {
-    "api/*.py": {
-      "maxDuration": 30
-    }
-  }
+  "timeout": 30
 }
