@@ -50,8 +50,8 @@ LOGIN_URL = 'http://127.0.0.1:5500/login.html'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# DEBUG = True
+DEBUG=False
 # ALLOWED_HOSTS = ["*"]
 
 
@@ -156,13 +156,27 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-        'CONN_MAX_AGE': 60,
-        'OPTIONS': {
-            'options': '-c statement_timeout=30000',
-            'connect_timeout': 10,
-        },
+        'CONN_MAX_AGE': 600,  
     }
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME'),
+#         'USER': os.getenv('DB_USER'),
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'HOST': os.getenv('DB_HOST'),
+#         'PORT': os.getenv('DB_PORT'),
+#         'CONN_MAX_AGE': 60,
+#         'OPTIONS': {
+#             'options': '-c statement_timeout=30000',
+#             'connect_timeout': 10,
+#         },
+#     }
+# }
 
 
 REST_FRAMEWORK = {
