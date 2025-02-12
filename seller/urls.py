@@ -14,6 +14,8 @@ urlpatterns = [
     path('seller-details-update/<int:seller_id>/', views.SellerDetailsUpdateView.as_view(), name='seller-details-update'),
     path('reviews/<int:seller_id>/', views.SellerReviewListCreateDeleteView.as_view(), name='seller-review-list-create'),
     path('reviews/delete/<int:seller_id>/<int:pk>/', views.SellerReviewListCreateDeleteView.as_view(), name='seller-review-delete'),
+    path('seller/<int:seller_id>/average-rating/', views.SellerAverageRatingView.as_view(), name='seller-average-rating'),
+    path('sellers/average-rating/', views.AllSellersAverageRatingView.as_view(), name='all-sellers-average-rating'),
 ]
 
 

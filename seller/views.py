@@ -16,7 +16,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from .models import DISTRICT_CHOICES
 from django.db.models import Q
-
+from django.db.models import Avg
+from .serializers import ReviewGetSerializer
+from . import models
 # for sending email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -277,12 +279,155 @@ class SellerReviewListCreateDeleteView(APIView):
 
 
 
-    # def delete(self, request, seller_id, review_id):
-    #     # Ensure the review exists and belongs to the current user
-    #     review = get_object_or_404(Review, id=review_id, food_item_id=seller_id)
-    #     if review.user != request.user:
-    #         return Response({"error": "You can only delete your own reviews."}, status=status.HTTP_403_FORBIDDEN)
 
-    #     # Delete the review
-    #     review.delete()
-    #     return Response({"message": "Review deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+from django.db.models import Avg, Case, When, IntegerField
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from .models import Review
+
+# Mapping numbers back to stars
+def get_star_representation(average_rating):
+    if average_rating is None:
+        return "No Ratings"
+    stars = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"]
+    return stars[min(round(average_rating) - 1, 4)]  # Ensuring it doesn't exceed index range
+
+class SellerAverageRatingView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, seller_id):
+        try:
+            reviews = Review.objects.filter(seller_id=seller_id)
+            if not reviews.exists():
+                return Response({"detail": "No reviews found for this seller."}, status=status.HTTP_404_NOT_FOUND)
+
+            # Convert star ratings to numbers for averaging
+            average_rating = reviews.aggregate(
+                avg_rating=Avg(
+                    Case(
+                        When(rating="⭐", then=1),
+                        When(rating="⭐⭐", then=2),
+                        When(rating="⭐⭐⭐", then=3),
+                        When(rating="⭐⭐⭐⭐", then=4),
+                        When(rating="⭐⭐⭐⭐⭐", then=5),
+                        output_field=IntegerField(),
+                    )
+                )
+            )["avg_rating"]
+
+            return Response(
+                {
+                    "seller_id": seller_id,
+                    "average_rating": round(average_rating, 2) if average_rating else 0,
+                    "average_stars": get_star_representation(average_rating),
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AllSellersAverageRatingView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        try:
+            sellers = Seller.objects.all()
+            if not sellers.exists():
+                return Response({"detail": "No sellers found."}, status=status.HTTP_404_NOT_FOUND)
+
+            seller_ratings = []
+
+            for seller in sellers:
+                reviews = seller.reviews.all()
+                if reviews.exists():
+                    average_rating = reviews.aggregate(
+                        avg_rating=Avg(
+                            Case(
+                                When(rating="⭐", then=1),
+                                When(rating="⭐⭐", then=2),
+                                When(rating="⭐⭐⭐", then=3),
+                                When(rating="⭐⭐⭐⭐", then=4),
+                                When(rating="⭐⭐⭐⭐⭐", then=5),
+                                output_field=IntegerField(),
+                            )
+                        )
+                    )["avg_rating"]
+                else:
+                    average_rating = None
+
+                seller_ratings.append({
+                    "seller_id": seller.id,
+                    "seller_name": seller.company_name,
+                    "average_rating": round(average_rating, 2) if average_rating else 0,
+                    "average_stars": get_star_representation(average_rating),
+                    "message": get_rating_message(average_rating),  # NEW MESSAGE FIELD
+                })
+
+            return Response(seller_ratings, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Function to return rating messages
+def get_rating_message(average_rating):
+    if average_rating is None:
+        return "No ratings yet."
+    elif average_rating >= 4.5:
+        return "Excellent seller!"
+    elif average_rating >= 4.0:
+        return "Great seller!"
+    elif average_rating >= 3.0:
+        return "Good seller."
+    elif average_rating >= 2.0:
+        return "Average service."
+    else:
+        return "Needs improvement."
+
+
+
+# class AllSellersAverageRatingView(APIView):
+#     permission_classes = [permissions.AllowAny]
+
+#     def get(self, request):
+#         try:
+#             sellers = Seller.objects.all()
+#             if not sellers.exists():
+#                 return Response({"detail": "No sellers found."}, status=status.HTTP_404_NOT_FOUND)
+
+#             seller_ratings = []
+
+#             for seller in sellers:
+#                 reviews = seller.reviews.all()
+#                 if reviews.exists():
+#                     average_rating = reviews.aggregate(
+#                         avg_rating=Avg(
+#                             Case(
+#                                 When(rating="⭐", then=1),
+#                                 When(rating="⭐⭐", then=2),
+#                                 When(rating="⭐⭐⭐", then=3),
+#                                 When(rating="⭐⭐⭐⭐", then=4),
+#                                 When(rating="⭐⭐⭐⭐⭐", then=5),
+#                                 output_field=IntegerField(),
+#                             )
+#                         )
+#                     )["avg_rating"]
+#                 else:
+#                     average_rating = None
+
+#                 seller_ratings.append({
+#                     "seller_id": seller.id,
+#                     "seller_name": seller.company_name,
+#                     "average_rating": round(average_rating, 2) if average_rating else 0,
+#                     "average_stars": get_star_representation(average_rating),
+#                 })
+
+#             return Response(seller_ratings, status=status.HTTP_200_OK)
+
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+
