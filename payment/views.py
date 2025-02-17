@@ -53,7 +53,7 @@ class Payment_View(APIView):
             "total_amount": total_price,
             "currency": "BDT",
             "tran_id": transaction_id,
-            "success_url": f"http://127.0.0.1:8000/payment/successs/?user_id={request.user.id}",
+            "success_url": f"https://quick-bite-backend-pink.vercel.app/payment/successs/?user_id={request.user.id}",
             # "success_url": f"http://127.0.0.1:8000/successs/",
             "fail_url": f"{settings.BASE_URL}/payment/fail/",        
             "cancel_url": f"{settings.BASE_URL}/payment/cancel/",    
