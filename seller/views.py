@@ -170,8 +170,8 @@ class SellerListView(APIView):
     
 
 class SellerDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.AllowAny]
+    # authentication_classes = [TokenAuthentication]
 
     def get(self, request, pk):  
         try:
