@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 from .models import FoodItem, Comment
-from .serializers import FoodItemSerializer, CommentSerializer, CommentGetSerializer
+from .serializers import FoodItemSerializer,AllCommentSerializer, CommentSerializer, CommentGetSerializer
 from category.models import Category
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -95,6 +95,19 @@ class FoodItemListpecificSellerView(APIView):
         serializer = FoodItemSerializer(food_items, many=True)
         return Response(serializer.data)
     
+
+class AllCommentView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        """
+        Retrieve all comments with food name instead of just food ID.
+        """
+        comments = Comment.objects.select_related('food_item').all()  # Optimized query
+        serializer = AllCommentSerializer(comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
 
 class CommentListView(APIView):
     permission_classes = [permissions.AllowAny]

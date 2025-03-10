@@ -22,7 +22,13 @@ class FoodItemSerializer(serializers.ModelSerializer):
         model = models.FoodItem
         fields = '__all__'
 
+class AllCommentSerializer(serializers.ModelSerializer):
+    food_name = serializers.CharField(source="food_item.name", read_only=True)  # Fetch food name
 
+    class Meta:
+        model = models.Comment
+        fields = ['id', 'user', 'food_item', 'food_name', 'text', 'created_at']
+        extra_kwargs = {'food_item': {'write_only': True}}  
 
 class CommentSerializer(serializers.ModelSerializer):
     # user = serializers.StringRelatedField()
