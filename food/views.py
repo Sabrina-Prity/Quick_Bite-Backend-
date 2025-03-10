@@ -101,7 +101,7 @@ class AllCommentView(APIView):
 
     def get(self, request):
         """
-        Retrieve all comments with food name instead of just food ID.
+        Retrieve all comments with food name.
         """
         comments = Comment.objects.select_related('food_item').all()  # Optimized query
         serializer = AllCommentSerializer(comments, many=True)

@@ -4,7 +4,8 @@ from . import models
 from .models import FoodItem
 from seller.serializers import SellerSerializer
 from customer.serializers import CustomerSerializer
-
+from rest_framework import serializers
+from .models import Comment
 
 
 class FoodItemGetSerializer(serializers.ModelSerializer):
@@ -22,13 +23,15 @@ class FoodItemSerializer(serializers.ModelSerializer):
         model = models.FoodItem
         fields = '__all__'
 
+
+
 class AllCommentSerializer(serializers.ModelSerializer):
     food_name = serializers.CharField(source="food_item.name", read_only=True)  # Fetch food name
 
     class Meta:
-        model = models.Comment
-        fields = ['id', 'user', 'food_item', 'food_name', 'text', 'created_at']
-        extra_kwargs = {'food_item': {'write_only': True}}  
+        model = Comment
+        fields = ['id', 'user', 'food_name', 'body', 'rating', 'created_on']  # Use `body` instead of `text`
+ 
 
 class CommentSerializer(serializers.ModelSerializer):
     # user = serializers.StringRelatedField()
