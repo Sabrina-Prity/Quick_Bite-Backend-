@@ -72,21 +72,14 @@ class FoodItemDeleteView(APIView):
         except FoodItem.DoesNotExist:
             return Response({"error": "Food item not found."}, status=404)
         
-
-class FoodItemListSellerView(APIView):
-    permission_classes = [permissions.AllowAny]  # Require the user to be authenticated
+class FoodItemListView(APIView):
+    permission_classes = [permissions.AllowAny]  # Allow anyone to access this view
 
     def get(self, request):
-        user = request.user
+        # Fetch food items (no need for seller validation)
+        food_items = FoodItem.objects.all()
 
-        # Check if the user has an associated seller
-        if not hasattr(user, 'seller') or user.seller is None:
-            return Response({"error": "This user is not associated with a seller."}, status=400)
-
-        # Fetch food items for the seller associated with the authenticated user
-        food_items = FoodItem.objects.filter(seller=user.seller)
-
-        # Get all 'search' query parameters
+        # Get all 'search' query parameters (if any)
         search_params = request.query_params.getlist('search', [])
 
         # If there are search parameters, filter based on search terms
@@ -98,11 +91,14 @@ class FoodItemListSellerView(APIView):
 
         # If no food items are found, return a 404 response
         if not food_items.exists():
-            return Response({"error": "No food items found for this seller with the given search criteria."}, status=404)
+            return Response({"error": "No food items found with the given search criteria."}, status=404)
 
-        # Serialize the food items
+        # Serialize the food items and return the response
         serializer = FoodItemSerializer(food_items, many=True)
         return Response(serializer.data)
+    
+
+    
 
 class FoodItemListpecificSellerView(APIView):
     permission_classes = [permissions.AllowAny]  
