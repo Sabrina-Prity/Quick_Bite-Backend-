@@ -73,13 +73,18 @@ class FoodItemDeleteView(APIView):
             return Response({"error": "Food item not found."}, status=404)
         
 
-class FoodItemListForAuthenticatedSellerView(APIView):
-    permission_classes = [permissions.IsAuthenticated]  # Require the user to be authenticated
-    
+class FoodItemListSellerView(APIView):
+    permission_classes = [permissions.AllowAny]  # Require the user to be authenticated
+
     def get(self, request):
-        # The authenticated user is assumed to be a seller
         user = request.user
-        food_items = FoodItem.objects.filter(seller=user.seller)  # Assuming you have a `seller` field in your User model
+
+        # Check if the user has an associated seller
+        if not hasattr(user, 'seller') or user.seller is None:
+            return Response({"error": "This user is not associated with a seller."}, status=400)
+
+        # Fetch food items for the seller associated with the authenticated user
+        food_items = FoodItem.objects.filter(seller=user.seller)
 
         # Get all 'search' query parameters
         search_params = request.query_params.getlist('search', [])
