@@ -73,16 +73,14 @@ class FoodItemDeleteView(APIView):
             return Response({"error": "Food item not found."}, status=404)
         
 class FoodItemListView(APIView):
-    permission_classes = [permissions.AllowAny]  # Allow anyone to access this view
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        # Fetch food items (no need for seller validation)
         food_items = FoodItem.objects.all()
 
-        # Get all 'search' query parameters (if any)
+        # Fetch search query parameter
         search_params = request.query_params.getlist('search', [])
 
-        # If there are search parameters, filter based on search terms
         if search_params:
             query = Q()
             for search_term in search_params:
@@ -93,12 +91,13 @@ class FoodItemListView(APIView):
         if not food_items.exists():
             return Response({"error": "No food items found with the given search criteria."}, status=404)
 
-        # Serialize the food items and return the response
+        # Serialize and return food items
         serializer = FoodItemSerializer(food_items, many=True)
         return Response(serializer.data)
-    
 
     
+
+
 
 class FoodItemListpecificSellerView(APIView):
     permission_classes = [permissions.AllowAny]  
